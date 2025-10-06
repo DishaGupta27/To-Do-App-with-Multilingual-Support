@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useTranslation } from "react-i18next";
 import LoadingSpinner from "./LoadingSpinner";
+import toast from "react-hot-toast";
 
 export default function CreateTaskModal({ onClose, setTasks, user }) {
     const { t } = useTranslation();
@@ -15,6 +16,7 @@ export default function CreateTaskModal({ onClose, setTasks, user }) {
         if (!user) return;
         if (!title.trim() || !notes.trim() || !priority.trim()) {
             setError(t("allFieldsRequired"));
+            toast.error(t("Please fill in all fields"));
             return;
         }
 
@@ -38,8 +40,10 @@ export default function CreateTaskModal({ onClose, setTasks, user }) {
 
         if (supabaseError) {
             setError(supabaseError.message);
+            toast.error(t("Failed to create task"));
         } else if (data?.length) {
             setTasks((prev) => [data[0], ...prev]);
+            toast.success(t("Task created successfully!"));
             onClose();
         }
     };

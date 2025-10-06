@@ -17,7 +17,6 @@ export default function TaskBoard({
     const { t, i18n } = useTranslation();
     const [selectedTask, setSelectedTask] = useState(null);
 
-    // Filtering logic
     const filteredTasks = tasks.filter((task) => {
         const s = searchTerm?.toLowerCase() || "";
         const titleMatch = task.title?.toLowerCase().includes(s);
@@ -31,7 +30,6 @@ export default function TaskBoard({
 
     const statuses = filter === "all" ? ["todo", "in-progress", "completed"] : [filter];
 
-    // Supabase actions
     const deleteTask = async (id) => {
         await supabase.from("tasks").delete().eq("id", id);
         setTasks((prev) => prev.filter((t) => t.id !== id));
@@ -111,9 +109,9 @@ export default function TaskBoard({
         <>
             <DragDropContext onDragEnd={handleDragEnd}>
                 <div
-                    className={`w-full grid gap-6 ${filter === "all"
-                            ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-                            : "grid-cols-1"
+                    className={`w-full grid gap-4 sm:gap-6 ${filter === "all"
+                        ? "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
+                        : "grid-cols-1"
                         }`}
                 >
                     {statuses.map((status) => {
@@ -125,8 +123,8 @@ export default function TaskBoard({
                                         ref={provided.innerRef}
                                         {...provided.droppableProps}
                                         className={`bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm min-h-[120px] transition-all duration-200 ${snapshot.isDraggingOver
-                                                ? "ring-2 ring-blue-400"
-                                                : ""
+                                            ? "ring-2 ring-blue-400"
+                                            : ""
                                             }`}
                                     >
                                         <h3 className="text-lg font-semibold mb-3 flex items-center justify-between text-gray-800 dark:text-gray-200 capitalize">

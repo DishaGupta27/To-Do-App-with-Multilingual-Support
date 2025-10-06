@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { formatDate } from "../utils/formatDate";
+import toast from "react-hot-toast";
 
 export default function ReadMoreModal({ task, onClose, editTask, t, lang = "en" }) {
     const [isEditing, setIsEditing] = useState(false);
@@ -19,16 +20,28 @@ export default function ReadMoreModal({ task, onClose, editTask, t, lang = "en" 
     const saveEdit = async () => {
         if (!title.trim() || !notes.trim() || !priority.trim()) {
             setError(t("allFieldsRequired"));
+            toast.error(t("Please fill in all fields"));
             return;
         }
         setError("");
-        const updatedTask = await editTask(task.id, {
-            title: title.trim(),
-            notes: notes.trim(),
-            priority: priority.toLowerCase(),
-        });
-        if (updatedTask?.updated_at) setUpdatedAtStr(updatedTask.updated_at);
-        setIsEditing(false);
+
+        try {
+            const updatedTask = await editTask(task.id, {
+                title: title.trim(),
+                notes: notes.trim(),
+                priority: priority.toLowerCase(),
+            });
+
+            if (updatedTask?.updated_at) {
+                setUpdatedAtStr(updatedTask.updated_at);
+                toast.success(t("Task updated successfully!"));
+            }
+
+            setIsEditing(false);
+        } catch (err) {
+            console.error("Error updating task:", err.message);
+            toast.error(t("Failed to update task"));
+        }
     };
 
     const handleOverlayClick = (e) => {
@@ -65,10 +78,16 @@ export default function ReadMoreModal({ task, onClose, editTask, t, lang = "en" 
                             <option value="low">{t("low")}</option>
                         </select>
                         <div className="flex gap-3 justify-end mt-2">
-                            <button onClick={saveEdit} className="px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all">
+                            <button
+                                onClick={saveEdit}
+                                className="px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all"
+                            >
                                 {t("save")}
                             </button>
-                            <button onClick={() => setIsEditing(false)} className="px-3 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-all">
+                            <button
+                                onClick={() => setIsEditing(false)}
+                                className="px-3 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-all"
+                            >
                                 {t("close")}
                             </button>
                         </div>

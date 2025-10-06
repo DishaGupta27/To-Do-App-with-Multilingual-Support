@@ -1,6 +1,6 @@
-// components/TaskCard.jsx
 import React, { useState, useEffect } from "react";
 import { formatDate } from "../utils/formatDate";
+import toast from "react-hot-toast";
 
 export default function TaskCard({
     task,
@@ -26,18 +26,50 @@ export default function TaskCard({
     const saveEdit = async () => {
         if (!title.trim() || !notes.trim() || !priority.trim()) {
             setError(t("allFieldsRequired"));
+            toast.error(t("Please fill in all fields"));
             return;
         }
+
         setError("");
 
-        const updatedTask = await editTask(task.id, {
-            title: title.trim(),
-            notes: notes.trim(),
-            priority: priority.toLowerCase(),
-        });
+        try {
+            const updatedTask = await editTask(task.id, {
+                title: title.trim(),
+                notes: notes.trim(),
+                priority: priority.toLowerCase(),
+            });
 
-        if (updatedTask) {
-            setIsEditing(false);
+            if (updatedTask) {
+                setIsEditing(false);
+                toast.success(t("Task updated successfully!"));
+            }
+        } catch (error) {
+            toast.error(t("Failed to update task"));
+            console.error(error);
+        }
+    };
+
+    const handleDelete = async () => {
+        try {
+            await deleteTask(task.id);
+            toast.success(t("Task deleted successfully!"));
+        } catch (error) {
+            toast.error(t("Failed to delete task"));
+        }
+    };
+
+    const handleToggleStatus = async (status) => {
+        try {
+            await toggleStatus(task, status);
+            toast.success(
+                status === "completed"
+                    ? t("Task marked as completed")
+                    : status === "in-progress"
+                        ? t("Task moved to in progress")
+                        : t("Task moved to todo")
+            );
+        } catch (error) {
+            toast.error(t("Failed to update status"));
         }
     };
 
@@ -49,7 +81,8 @@ export default function TaskCard({
                 : "bg-emerald-500";
 
     return (
-        <article className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden transition-transform hover:-translate-y-1 flex flex-col justify-between">
+        <article className="w-full bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden transition-transform hover:-translate-y-1 flex flex-col justify-between">
+
             {/* Top Priority Bar */}
             <div className={`h-1 ${priorityColor}`} />
 
@@ -140,10 +173,10 @@ export default function TaskCard({
                     </div>
                 )}
 
-                {/* Buttons in One Line (No Scrollbar) */}
+                {/* Buttons */}
                 <div className="flex items-center justify-start gap-1.5 mt-3 flex-wrap">
                     <button
-                        onClick={() => deleteTask(task.id)}
+                        onClick={handleDelete}
                         className="px-2 py-1 text-xs bg-red-500 text-white rounded hover:opacity-90"
                     >
                         {t("delete")}
@@ -151,7 +184,7 @@ export default function TaskCard({
 
                     {task.status !== "completed" && (
                         <button
-                            onClick={() => toggleStatus(task, "completed")}
+                            onClick={() => handleToggleStatus("completed")}
                             className="px-2 py-1 text-xs bg-emerald-500 text-white rounded hover:opacity-90"
                         >
                             {t("complete")}
@@ -160,7 +193,7 @@ export default function TaskCard({
 
                     {task.status !== "in-progress" && (
                         <button
-                            onClick={() => toggleStatus(task, "in-progress")}
+                            onClick={() => handleToggleStatus("in-progress")}
                             className="px-2 py-1 text-xs bg-amber-400 text-white rounded hover:opacity-90"
                         >
                             {t("progress")}
@@ -169,7 +202,7 @@ export default function TaskCard({
 
                     {task.status !== "todo" && (
                         <button
-                            onClick={() => toggleStatus(task, "todo")}
+                            onClick={() => handleToggleStatus("todo")}
                             className="px-2 py-1 text-xs bg-sky-500 text-white rounded hover:opacity-90"
                         >
                             {t("todo")}

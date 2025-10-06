@@ -1,8 +1,10 @@
+// src/components/Signup.jsx
 import React, { useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
+import toast from "react-hot-toast";
 
 export default function Signup() {
     const { t } = useTranslation();
@@ -10,33 +12,56 @@ export default function Signup() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
     const navigate = useNavigate();
 
     const handleSignup = async (e) => {
         e.preventDefault();
-        setError("");
         setLoading(true);
 
-        const { data: userData, error: signupError } = await supabase.auth.signUp(
-            { email, password },
-            { redirectTo: "http://localhost:5173/login" }
-        );
+        try {
+            const { data: userData, error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: { emailRedirectTo: "http://localhost:5173/login" },
+            });
 
-        setLoading(false);
+            setLoading(false);
 
-        if (signupError) {
-            setError(signupError.message);
-            return;
+            if (error) {
+                const msg = error.message || "";
+                const lower = msg.toLowerCase();
+
+                if (lower.includes("already") || lower.includes("exists")) {
+                    toast.error(t("email_already_in_use"));
+                } else {
+                    toast.error(t("signup_failed") + (msg ? `: ${msg}` : ""));
+                }
+                return;
+            }
+
+            if (userData?.user) {
+                try {
+                    await supabase.from("profiles").insert([
+                        { id: userData.user.id, full_name: name },
+                    ]);
+                } catch {
+                    toast.error(t("profile_save_failed"));
+                }
+
+                toast.success(t("signup_success"));
+                setTimeout(() => navigate("/login"), 500);
+                return;
+            }
+
+            // Otherwise, confirmation email flow
+            toast.success(t("verification_email_sent"));
+            navigate("/login");
+
+        } catch (err) {
+            setLoading(false);
+            const msg = err?.message || String(err);
+            toast.error(t("signup_failed") + (msg ? `: ${msg}` : ""));
         }
-
-        if (userData?.user) {
-            await supabase
-                .from("profiles")
-                .insert([{ id: userData.user.id, full_name: name }]);
-        }
-
-        navigate("/login");
     };
 
     return (
@@ -76,8 +101,6 @@ export default function Signup() {
                         className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-sky-400 outline-none"
                     />
 
-                    {error && <p className="text-sm text-red-600 text-center">{error}</p>}
-
                     <button
                         type="submit"
                         disabled={loading}
@@ -88,7 +111,7 @@ export default function Signup() {
                 </form>
 
                 <p className="text-center text-sm text-slate-500 mt-4">
-                    {t("AlreadyhaveanAccount")} {" "}
+                    {t("AlreadyhaveanAccount")}{" "}
                     <Link to="/login" className="text-sky-600 hover:underline">
                         {t("login")}
                     </Link>

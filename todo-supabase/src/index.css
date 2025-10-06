@@ -10,6 +10,8 @@ body {
 ,
 #root {
     height: 100%;
+    width: 100%;
+    overflow-x: hidden;
     background-color: #f8fafc;
     /* same bg as dashboard */
     font-family: 'Inter', sans-serif;
