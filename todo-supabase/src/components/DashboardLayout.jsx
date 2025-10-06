@@ -193,33 +193,58 @@ export default function DashboardLayout() {
             <div className="flex-1 flex flex-col">
                 <header className="flex justify-between items-center bg-white shadow p-4 gap-4 flex-wrap">
                     <div className="flex gap-2 flex-wrap items-center">
-                        <input
-                            type="text"
-                            placeholder={t("searchPlacehold")}
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="border rounded px-3 py-2 max-w-xs w-full sm:w-auto"
-                        />
+                        {/* Search Input with Magnifying Glass */}
+                        <div className="relative max-w-xs w-full sm:w-auto">
+                            <input
+                                type="text"
+                                placeholder={t("searchPlacehold")}
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="border rounded pl-10 pr-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-sky-500"
+                            />
+                            <svg
+                                className="w-5 h-5 absolute left-3 top-[9px] text-gray-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"
+                                />
+                            </svg>
+                        </div>
+
+                        {/* Priority Filter */}
                         <select
                             value={filterPriority}
                             onChange={(e) => setFilterPriority(e.target.value)}
-                            className="border rounded px-3 py-2 max-w-xs w-full sm:w-auto"
+                            className="border rounded px-3 py-2 max-w-xs w-full sm:w-auto leading-relaxed font-[Noto_Sans_Devanagari] focus:outline-none focus:ring-2 focus:ring-sky-500"
+                            style={{ lineHeight: "2", overflow: "visible" }}
                         >
                             <option value="">{t("allPriorities")}</option>
                             <option value="high">{t("high")}</option>
                             <option value="medium">{t("medium")}</option>
                             <option value="low">{t("low")}</option>
                         </select>
+
+                        {/* Date Filter */}
                         <input
                             type="date"
                             value={filterDate}
                             onChange={(e) => setFilterDate(e.target.value)}
-                            className="border rounded px-3 py-2 max-w-xs w-full sm:w-auto"
+                            className="border rounded px-3 py-2 max-w-xs w-full sm:w-auto leading-relaxed font-[Noto_Sans_Devanagari] focus:outline-none focus:ring-2 focus:ring-sky-500"
+                            style={{ lineHeight: "2", overflow: "visible" }}
                             placeholder={t("datePlaceholder")}
                         />
                     </div>
+
+                    {/* Right Section: Language, Initials, Logout */}
                     <div className="flex items-center gap-4">
-                        <LanguageSwitcher variant="dashboard" setLangLoading={setLangLoading} />
+                        <LanguageSwitcher variant="dashboard" setLangLoading={setLangLoading}
+                            className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500" />
                         <span className="font-semibold bg-sky-600 text-white rounded-full px-3 py-1">
                             {profile?.full_name
                                 ?.split(" ")
@@ -235,6 +260,7 @@ export default function DashboardLayout() {
                         </button>
                     </div>
                 </header>
+
 
                 <main className="flex-1 overflow-y-auto p-6">
                     <TaskBoard
