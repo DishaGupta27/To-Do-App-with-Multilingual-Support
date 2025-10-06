@@ -51,9 +51,9 @@ export default function CreateTaskModal({ onClose, setTasks, user }) {
     return (
         <div
             onClick={handleOverlayClick}
-            className="fixed inset-0 z-50 flex justify-center items-center bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex justify-center items-center bg-black/40 backdrop-blur-sm"
         >
-            <div className="bg-white text-black p-6 rounded-lg shadow-2xl w-96">
+            <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6 rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.1)] border border-gray-200 dark:border-gray-700 w-96 transition-all">
                 <h2 className="text-xl mb-4 font-semibold">{t("createTask")}</h2>
 
                 {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
@@ -63,36 +63,36 @@ export default function CreateTaskModal({ onClose, setTasks, user }) {
                     placeholder={t("title")}
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    className="border p-2 w-full mb-3 rounded"
+                    className="border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:outline-none p-2 w-full mb-3 rounded-lg transition-all"
                 />
                 <textarea
                     placeholder={t("notes")}
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
-                    className="border p-2 w-full mb-3 rounded"
+                    className="border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:outline-none p-2 w-full mb-3 rounded-lg transition-all"
                 />
                 <select
                     value={priority}
                     onChange={(e) => setPriority(e.target.value)}
-                    className="border p-2 w-full mb-3 rounded"
+                    className="border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:outline-none p-2 w-full mb-3 rounded-lg transition-all"
                 >
                     <option value="high">{t("high")}</option>
                     <option value="medium">{t("medium")}</option>
                     <option value="low">{t("low")}</option>
                 </select>
 
-                <div className="flex justify-end gap-2">
+                <div className="flex justify-end gap-3 mt-4">
                     <button
                         onClick={onClose}
                         disabled={loading}
-                        className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                        className="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-all"
                     >
                         {t("cancel")}
                     </button>
                     <button
                         onClick={createTask}
                         disabled={loading}
-                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center justify-center min-w-[80px]"
+                        className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all flex items-center justify-center min-w-[80px]"
                     >
                         {loading ? <LoadingSpinner size="sm" /> : t("save")}
                     </button>

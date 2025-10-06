@@ -22,6 +22,8 @@ export default function DashboardLayout() {
     const [filterPriority, setFilterPriority] = useState("");
     const [filterDate, setFilterDate] = useState("");
 
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
     const fetchTasks = async () => {
         setLoadingTasks(true);
         const {
@@ -29,7 +31,6 @@ export default function DashboardLayout() {
         } = await supabase.auth.getUser();
         if (!user) return;
         setUser(user);
-
 
         const { data: profileData } = await supabase
             .from("profiles")
@@ -41,9 +42,7 @@ export default function DashboardLayout() {
         let query = supabase.from("tasks").select("*").eq("user_id", user.id);
         if (filter !== "all") query = query.eq("status", filter);
 
-        const { data, error } = await query.order("created_at", {
-            ascending: false,
-        });
+        const { data, error } = await query.order("created_at", { ascending: false });
         if (!error) setTasks(data);
         setLoadingTasks(false);
     };
@@ -84,36 +83,113 @@ export default function DashboardLayout() {
                 </div>
             )}
 
-            <aside className="w-64 bg-blue-600 text-white flex flex-col">
-                <h1 className="text-2xl font-bold p-4">{t("appName")}</h1>
-                <div className="p-4">
+            {/* Sidebar */}
+            <aside
+                className={`h-screen flex flex-col bg-gradient-to-b from-sky-500 to-sky-700 text-white transition-all duration-200
+        ${isSidebarOpen ? "w-64" : "w-16"} shrink-0 shadow-lg`}
+            >
+                {/* Header */}
+                <div className="px-4 py-5 flex items-center gap-2">
+                    <div className="w-10 h-10 flex items-center justify-center rounded-md bg-white/15 text-lg font-bold">
+                        TM
+                    </div>
+                    {isSidebarOpen && (
+                        <h1 className="text-lg font-bold tracking-tight">{t("appName")}</h1>
+                    )}
+                </div>
+
+                {/* Create Task */}
+                <div className="px-4">
                     <button
                         onClick={() => setShowModal(true)}
-                        className="w-full bg-green-500 hover:bg-green-600 text-white p-2 rounded"
+                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-md font-medium shadow-sm
+              ${isSidebarOpen ? "justify-start" : "justify-center"} bg-white text-sky-700 hover:bg-sky-50`}
                     >
-                        + {t("createTask")}
+                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M12 5v14M5 12h14"
+                                stroke="#0ea5e9"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                            />
+                        </svg>
+                        <span className={`${isSidebarOpen ? "inline" : "hidden"}`}>
+                            + {t("createTask")}
+                        </span>
                     </button>
                 </div>
-                <nav className="flex-1 p-4 space-y-2">
-                    {["all", "completed", "in-progress", "todo"].map((status) => (
+
+                {/* Nav */}
+                <nav className="mt-6 px-2 flex-1 overflow-y-auto">
+                    {[
+                        { key: "all", label: t("tasks"), icon: <ListIcon /> },
+                        { key: "todo", label: t("todo"), icon: <ClockIcon /> },
+                        { key: "in-progress", label: t("inProgress"), icon: <SpinnerIcon /> },
+                        { key: "completed", label: t("completed"), icon: <CheckIcon /> },
+                    ].map((item) => (
                         <button
-                            key={status}
-                            onClick={() => setFilter(status)}
-                            className={`w-full p-2 text-left rounded ${filter === status ? "bg-blue-500" : ""
-                                }`}
+                            key={item.key}
+                            onClick={() => setFilter(item.key)}
+                            className={`group w-full flex items-center gap-3 text-left px-3 py-2 rounded-md transition-colors mb-1
+                ${filter === item.key ? "bg-white/20" : "hover:bg-white/10"}`}
+                            title={!isSidebarOpen ? item.label : ""}
                         >
-                            {status === "all"
-                                ? t("tasks")
-                                : status === "in-progress"
-                                    ? t("inProgress")
-                                    : status === "todo"
-                                        ? t("todo")
-                                        : t("completed")}
+                            <div className="w-6 h-6 flex items-center justify-center text-white/90">
+                                {item.icon}
+                            </div>
+                            <span className={`${isSidebarOpen ? "inline" : "hidden"} font-medium`}>
+                                {item.label}
+                            </span>
                         </button>
                     ))}
                 </nav>
+
+                {/* Footer */}
+                <div className="px-4 mt-auto py-4 border-t border-white/10">
+                    {/* Profile */}
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-white/15 flex items-center justify-center text-white font-semibold">
+                            {profile?.full_name
+                                ? profile.full_name
+                                    .split(" ")
+                                    .map((n) => n[0])
+                                    .join("")
+                                    .slice(0, 2)
+                                    .toUpperCase()
+                                : "DG"}
+                        </div>
+                        <div className={`${isSidebarOpen ? "block" : "hidden"}`}>
+                            <div className="text-sm font-semibold">
+                                {t(profile?.full_name || "User")}
+                            </div>
+                            <div className="text-xs opacity-80">{t("productivity")}</div>
+                        </div>
+                    </div>
+
+                    {/* Buttons */}
+                    <div className="mt-3 flex gap-2 items-center">
+                        <button
+                            onClick={logout}
+                            className={`${isSidebarOpen
+                                ? "flex-1 px-3 py-2 text-sm"
+                                : "w-10 h-10 flex items-center justify-center"
+                                } rounded-md bg-red-500 hover:bg-red-600 text-white`}
+                            title="Logout"
+                        >
+                            {isSidebarOpen ? t("logout") : <LogoutIcon />}
+                        </button>
+                        <button
+                            onClick={() => setIsSidebarOpen((s) => !s)}
+                            className="w-10 h-10 rounded-md bg-white/15 hover:bg-white/25 flex items-center justify-center"
+                            title={isSidebarOpen ? "Collapse" : "Expand"}
+                        >
+                            {isSidebarOpen ? <CollapseIcon /> : <ExpandIcon />}
+                        </button>
+                    </div>
+                </div>
             </aside>
 
+            {/* Main */}
             <div className="flex-1 flex flex-col">
                 <header className="flex justify-between items-center bg-white shadow p-4 gap-4 flex-wrap">
                     <div className="flex gap-2 flex-wrap items-center">
@@ -143,11 +219,8 @@ export default function DashboardLayout() {
                         />
                     </div>
                     <div className="flex items-center gap-4">
-                        <LanguageSwitcher
-                            variant="dashboard"
-                            setLangLoading={setLangLoading}
-                        />
-                        <span className="font-semibold bg-blue-600 text-white rounded-full px-3 py-1">
+                        <LanguageSwitcher variant="dashboard" setLangLoading={setLangLoading} />
+                        <span className="font-semibold bg-sky-600 text-white rounded-full px-3 py-1">
                             {profile?.full_name
                                 ?.split(" ")
                                 .map((n) => n[0])
@@ -183,5 +256,104 @@ export default function DashboardLayout() {
                 />
             )}
         </div>
+    );
+}
+
+/* ---------- Icons ---------- */
+function ListIcon() {
+    return (
+        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+            <path
+                d="M8 6h11M8 12h11M8 18h11M3 6h.01M3 12h.01M3 18h.01"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+            />
+        </svg>
+    );
+}
+function ClockIcon() {
+    return (
+        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+            <path
+                d="M12 7v6l3 2"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+            <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.6" />
+        </svg>
+    );
+}
+function SpinnerIcon() {
+    return (
+        <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
+            <path
+                d="M21 12a9 9 0 10-9 9"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+            />
+        </svg>
+    );
+}
+function CheckIcon() {
+    return (
+        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+            <path
+                d="M5 13l4 4L19 7"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </svg>
+    );
+}
+function LogoutIcon() {
+    return (
+        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+            <path
+                d="M16 17l5-5-5-5M21 12H9"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+            <path
+                d="M13 19H7a2 2 0 01-2-2V7a2 2 0 012-2h6"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </svg>
+    );
+}
+function CollapseIcon() {
+    return (
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24">
+            <path
+                d="M15 19l-7-7 7-7"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </svg>
+    );
+}
+function ExpandIcon() {
+    return (
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24">
+            <path
+                d="M9 5l7 7-7 7"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </svg>
     );
 }

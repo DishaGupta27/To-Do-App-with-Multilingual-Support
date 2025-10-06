@@ -1,3 +1,4 @@
+// src/components/Login.jsx
 import React, { useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useNavigate, Link } from "react-router-dom";
@@ -8,54 +9,71 @@ export default function Login() {
     const { t } = useTranslation();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        const { error } = await supabase.auth.signInWithPassword({
+        setError("");
+        setLoading(true);
+
+        const { data, error } = await supabase.auth.signInWithPassword({
             email,
             password,
         });
+
+        setLoading(false);
         if (error) setError(error.message);
         else navigate("/dashboard");
     };
 
     return (
-        <div className="relative min-h-screen flex items-center justify-center bg-gray-100">
-            {/* Language Switcher for Auth */}
+        <div className="flex items-center justify-center min-h-screen bg-slate-50">
             <div className="absolute top-4 right-4">
-                <LanguageSwitcher variant="auth" />
+                <LanguageSwitcher />
             </div>
 
-            <div className="p-6 shadow rounded bg-white w-full max-w-sm">
-                <h2 className="text-xl mb-4">{t("login")}</h2>
-                {error && <p className="text-red-500">{error}</p>}
-                <form onSubmit={handleLogin} className="space-y-3">
+            <div className="bg-white shadow-md border border-slate-200 rounded-2xl w-[90%] max-w-md p-8">
+                <h2 className="text-2xl font-semibold text-center text-slate-800 mb-6">
+                    {t("login")}
+                </h2>
+
+                <form onSubmit={handleLogin} className="space-y-5">
                     <input
                         type="email"
-                        placeholder={t("email")}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="border p-2 w-full"
+                        placeholder={t("email")}
+                        required
+                        className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-sky-400 outline-none"
                     />
                     <input
                         type="password"
-                        placeholder={t("password")}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="border p-2 w-full"
+                        placeholder={t("password")}
+                        required
+                        className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-sky-400 outline-none"
                     />
+
+                    {error && <p className="text-sm text-red-600 text-center">{error}</p>}
+
                     <button
                         type="submit"
-                        className="bg-blue-500 text-white p-2 rounded w-full"
+                        disabled={loading}
+                        className="w-full bg-sky-500 text-white py-2 rounded-lg hover:bg-sky-600 transition font-medium"
                     >
-                        {t("login")}
+                        {loading ? t("loading") : t("login")}
                     </button>
-                    <p className="mt-2">
-                        <Link to="/signup" className="text-blue-500">{t("signup")}</Link>
-                    </p>
                 </form>
+
+                <p className="text-center text-sm text-slate-500 mt-4">
+                    {t("DonthaveanAccount")}{" "}
+                    <Link to="/signup" className="text-sky-600 hover:underline">
+                        {t("signup")}
+                    </Link>
+                </p>
             </div>
         </div>
     );
