@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import LoadingSpinner from "./LoadingSpinner";
 import toast from "react-hot-toast";
 
-export default function CreateTaskModal({ onClose, setTasks, user }) {
+export default function CreateTaskModal({ onClose, setTasks, user, setIsMobileSidebarOpen }) {
     const { t } = useTranslation();
     const [title, setTitle] = useState("");
     const [notes, setNotes] = useState("");
@@ -45,6 +45,7 @@ export default function CreateTaskModal({ onClose, setTasks, user }) {
             setTasks((prev) => [data[0], ...prev]);
             toast.success(t("Task created successfully!"));
             onClose();
+            if (window.innerWidth < 768 && setIsMobileSidebarOpen) setIsMobileSidebarOpen(false);
         }
     };
 

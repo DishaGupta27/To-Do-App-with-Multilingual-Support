@@ -13,7 +13,7 @@ createRoot(document.getElementById("root")).render(
       position="bottom-center"
       reverseOrder={false}
       toastOptions={{
-        duration: 500,
+        duration: 800,
         success: {
           style: {
             background: "#10B981",

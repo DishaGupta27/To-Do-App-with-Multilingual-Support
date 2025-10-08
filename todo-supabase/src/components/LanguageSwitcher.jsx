@@ -19,7 +19,7 @@ export default function LanguageSwitcher({ variant = "dashboard", setLangLoading
 
             setTimeout(() => {
                 if (setLangLoading) setLangLoading(false);
-            }, 700);
+            }, 100);
         }
     };
 
