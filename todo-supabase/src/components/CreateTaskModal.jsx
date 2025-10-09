@@ -43,7 +43,7 @@ export default function CreateTaskModal({ onClose, setTasks, user, setIsMobileSi
             toast.error(t("Failedtocreatetask"));
         } else if (data?.length) {
             setTasks((prev) => [data[0], ...prev]);
-            toast.success(t("Taskcreatedsuccessfully!"));
+            toast.success(t("Taskcreatedsuccessfully"));
             onClose();
             if (window.innerWidth < 768 && setIsMobileSidebarOpen) setIsMobileSidebarOpen(false);
         }

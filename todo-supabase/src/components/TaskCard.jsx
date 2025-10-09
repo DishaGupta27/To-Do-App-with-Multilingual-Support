@@ -52,7 +52,7 @@ export default function TaskCard({
     const handleDelete = async () => {
         try {
             await deleteTask(task.id);
-            toast.success(t("Taskdeletedsuccessfully!"));
+            toast.success(t("Taskdeletedsuccessfully"));
         } catch (error) {
             toast.error(t("Failedtodeletetask"));
         }
