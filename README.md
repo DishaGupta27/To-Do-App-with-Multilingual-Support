@@ -13,7 +13,7 @@ A modern, responsive To-Do application built with React, Supabase, and Tailwind 
 
 ## ✨ Features
 
-- **Authentication:** Email/password signup, login, logout (Supabase)
+- 🔒**Authentication:** Email/password signup, login, logout (Supabase)
 - **Tasks:** Add, edit, delete, toggle complete; only see your own tasks
 - **Fields:** Title, Notes, Status, Created/Updated timestamps, User ID
 - **Multilingual:** English + Hindi, language switcher, persistent preference, all UI strings localized
