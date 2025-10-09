@@ -83,9 +83,9 @@ create policy "Users can access their own profile"
 
 ---
 
-## - **📷 Video Walkthrough:** 
+## 📷 Video Walkthrough 
 
-  [Video]([https://www.loom.com/share/your-video-link](https://www.awesomescreenshot.com/video/45118055?key=b73f447d5fadea8de9cefaa478fdbc3c))  
+ [![Watch the video walkthrough](https://img.shields.io/badge/Watch%20Video-%F0%9F%93%B7-blue?style=for-the-badge)](https://www.awesomescreenshot.com/video/45118055?key=b73f447d5fadea8de9cefaa478fdbc3c)  
 
 ---
 
