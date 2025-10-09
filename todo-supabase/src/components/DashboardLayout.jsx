@@ -143,7 +143,7 @@ export default function DashboardLayout() {
                     </button>
                 </div>
                 {/* Navigation */}
-                <nav className="mt-6 px-2 flex-1 overflow-y-auto pb-32">
+                <nav className="mt-6 px-2 flex-1 overflow-y-auto md:overflow-y-visible">
                     {[
                         { key: "all", label: t("tasks"), icon: <ListIcon /> },
                         { key: "todo", label: t("todo"), icon: <ClockIcon /> },
@@ -210,7 +210,7 @@ export default function DashboardLayout() {
             {/* ---------- Main Content ---------- */}
             <div className="flex-1 flex flex-col min-h-0">
                 {/* Top Navbar */}
-                <header className="flex justify-between items-center bg-white shadow p-4 gap-4 flex-wrap">
+                <header className="flex justify-between items-center bg-white shadow p-4 gap-4 flex-wrap pt-16 md:pt-4">
                     <div className="flex gap-2 flex-wrap items-center">
                         {/* Search */}
                         <div className="relative max-w-xs w-full sm:w-auto">
