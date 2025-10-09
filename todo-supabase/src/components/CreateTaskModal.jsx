@@ -16,7 +16,7 @@ export default function CreateTaskModal({ onClose, setTasks, user, setIsMobileSi
         if (!user) return;
         if (!title.trim() || !notes.trim() || !priority.trim()) {
             setError(t("allFieldsRequired"));
-            toast.error(t("Please fill in all fields"));
+            toast.error(t("Pleasefillinallfields"));
             return;
         }
 
@@ -40,10 +40,10 @@ export default function CreateTaskModal({ onClose, setTasks, user, setIsMobileSi
 
         if (supabaseError) {
             setError(supabaseError.message);
-            toast.error(t("Failed to create task"));
+            toast.error(t("Failedtocreatetask"));
         } else if (data?.length) {
             setTasks((prev) => [data[0], ...prev]);
-            toast.success(t("Task created successfully!"));
+            toast.success(t("Taskcreatedsuccessfully!"));
             onClose();
             if (window.innerWidth < 768 && setIsMobileSidebarOpen) setIsMobileSidebarOpen(false);
         }

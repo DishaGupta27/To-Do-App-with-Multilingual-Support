@@ -70,12 +70,12 @@ export default function DashboardLayout() {
 
     if (langLoading) return (
         <div className="flex items-center justify-center h-screen">
-            <LoadingSpinner size="lg" text={t("languageSwitching")} />
+            <LoadingSpinner size="lg" text={t("switchingLanguage")} />
         </div>
     );
     if (loadingTasks) return (
         <div className="flex items-center justify-center h-screen">
-            <LoadingSpinner size="lg" text={t("Tasks are loading")} />
+            <LoadingSpinner size="lg" text={t("loadingTasks")} />
         </div>
     );
     if (logoutLoading)

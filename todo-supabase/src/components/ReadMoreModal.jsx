@@ -20,7 +20,7 @@ export default function ReadMoreModal({ task, onClose, editTask, t, lang = "en" 
     const saveEdit = async () => {
         if (!title.trim() || !notes.trim() || !priority.trim()) {
             setError(t("allFieldsRequired"));
-            toast.error(t("Please fill in all fields"));
+            toast.error(t("Pleasefillinallfields"));
             return;
         }
         setError("");
@@ -34,13 +34,13 @@ export default function ReadMoreModal({ task, onClose, editTask, t, lang = "en" 
 
             if (updatedTask?.updated_at) {
                 setUpdatedAtStr(updatedTask.updated_at);
-                toast.success(t("Task updated successfully!"));
+                toast.success(t("Taskupdatedsuccessfully!"));
             }
 
             setIsEditing(false);
         } catch (err) {
             console.error("Error updating task:", err.message);
-            toast.error(t("Failed to update task"));
+            toast.error(t("Failedtoupdatetask"));
         }
     };
 

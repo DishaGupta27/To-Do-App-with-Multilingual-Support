@@ -32,9 +32,9 @@ export default function Signup() {
                 const lower = msg.toLowerCase();
 
                 if (lower.includes("already") || lower.includes("exists")) {
-                    toast.error(t("email_already_in_use"));
+                    toast.error(t("emailalreadyinuse"));
                 } else {
-                    toast.error(t("signup_failed") + (msg ? `: ${msg}` : ""));
+                    toast.error(t("signupfailed") + (msg ? `: ${msg}` : ""));
                 }
                 return;
             }
@@ -45,22 +45,22 @@ export default function Signup() {
                         { id: userData.user.id, full_name: name },
                     ]);
                 } catch {
-                    toast.error(t("profile_save_failed"));
+                    toast.error(t("profilesavefailed"));
                 }
 
-                toast.success(t("signup_success"));
+                toast.success(t("signupsuccess"));
                 setTimeout(() => navigate("/login"), 500);
                 return;
             }
 
             // Otherwise, confirmation email flow
-            toast.success(t("verification_email_sent"));
+            toast.success(t("verificationemailsent"));
             navigate("/login");
 
         } catch (err) {
             setLoading(false);
             const msg = err?.message || String(err);
-            toast.error(t("signup_failed") + (msg ? `: ${msg}` : ""));
+            toast.error(t("signupfailed") + (msg ? `: ${msg}` : ""));
         }
     };
 

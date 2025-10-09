@@ -31,20 +31,20 @@ export default function Login() {
                 const lower = msg.toLowerCase();
 
                 if (lower.includes("invalid") || lower.includes("credentials") || lower.includes("wrong")) {
-                    toast.error(t("invalid_credentials"));
+                    toast.error(t("invalidcredentials"));
                 } else {
-                    toast.error(t("login_failed") + (msg ? `: ${msg}` : ""));
+                    toast.error(t("loginfailed") + (msg ? `: ${msg}` : ""));
                 }
                 return;
             }
 
-            toast.success(t("login_success"));
+            toast.success(t("loginsuccess"));
             setTimeout(() => navigate("/dashboard"), 600);
 
         } catch (err) {
             setLoading(false);
             const msg = err?.message || String(err);
-            toast.error(t("login_failed") + (msg ? `: ${msg}` : ""));
+            toast.error(t("loginfailed") + (msg ? `: ${msg}` : ""));
         }
     };
 

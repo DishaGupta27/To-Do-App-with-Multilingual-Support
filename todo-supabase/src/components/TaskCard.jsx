@@ -26,7 +26,7 @@ export default function TaskCard({
     const saveEdit = async () => {
         if (!title.trim() || !notes.trim() || !priority.trim()) {
             setError(t("allFieldsRequired"));
-            toast.error(t("Please fill in all fields"));
+            toast.error(t("Pleasefillinallfields"));
             return;
         }
 
@@ -41,10 +41,10 @@ export default function TaskCard({
 
             if (updatedTask) {
                 setIsEditing(false);
-                toast.success(t("Task updated successfully!"));
+                toast.success(t("Taskupdatedsuccessfully!"));
             }
         } catch (error) {
-            toast.error(t("Failed to update task"));
+            toast.error(t("Failedtoupdatetask"));
             console.error(error);
         }
     };
@@ -52,9 +52,9 @@ export default function TaskCard({
     const handleDelete = async () => {
         try {
             await deleteTask(task.id);
-            toast.success(t("Task deleted successfully!"));
+            toast.success(t("Taskdeletedsuccessfully!"));
         } catch (error) {
-            toast.error(t("Failed to delete task"));
+            toast.error(t("Failedtodeletetask"));
         }
     };
 
@@ -63,13 +63,13 @@ export default function TaskCard({
             await toggleStatus(task, status);
             toast.success(
                 status === "completed"
-                    ? t("Task marked as completed")
+                    ? t("Taskmarkedascompleted")
                     : status === "in-progress"
-                        ? t("Task moved to in progress")
-                        : t("Task moved to todo")
+                        ? t("Taskmovedtoinprogress")
+                        : t("Taskmovedtotodo")
             );
         } catch (error) {
-            toast.error(t("Failed to update status"));
+            toast.error(t("Failedtoupdatestatus"));
         }
     };
 
