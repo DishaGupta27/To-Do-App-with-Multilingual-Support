@@ -14,14 +14,14 @@ A modern, responsive To-Do application built with React, Supabase, and Tailwind 
 ## ✨ Features
 
 - 🔒**Authentication:** Email/password signup, login, logout (Supabase)
-- **Tasks:** Add, edit, delete, toggle complete; only see your own tasks
-- **Fields:** Title, Notes, Status, Created/Updated timestamps, User ID
-- **Multilingual:** English + Hindi, language switcher, persistent preference, all UI strings localized
-- **UI/UX:** Clean, responsive, mobile-friendly, with proper loading, empty, and error states
-- **Search & Filter:** Quickly find and filter tasks by priority, status, or text
-- **Dashboard View:** Tasks grouped by status (Todo, In Progress, Completed)
-- **Drag-and-Drop:** Reorder tasks visually
-- **Reusable Components:** Modular, maintainable codebase
+- 📝**Tasks:** Add, edit, delete, toggle complete; only see your own tasks
+- 📋**Fields:** Title, Notes, Status, Created/Updated timestamps, User ID
+- 🌐**Multilingual:** English + Hindi, language switcher, persistent preference, all UI strings localized
+- 🎨**UI/UX:** Clean, responsive, mobile-friendly, with proper loading, empty, and error states
+- 🔍**Search & Filter:** Quickly find and filter tasks by priority, status, or text
+- 📱**Dashboard View:** Tasks grouped by status (Todo, In Progress, Completed)
+- 🟦**Drag-and-Drop:** Reorder tasks visually
+- 🏷️**Reusable Components:** Modular, maintainable codebase
 
 ---
 
