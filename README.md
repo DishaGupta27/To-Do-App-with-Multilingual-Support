@@ -83,6 +83,12 @@ create policy "Users can access their own profile"
 
 ---
 
+## - **📷 Video Walkthrough:** 
+
+  [Video]([https://www.loom.com/share/your-video-link](https://www.awesomescreenshot.com/video/45118055?key=b73f447d5fadea8de9cefaa478fdbc3c))  
+
+---
+
 
 ## 🧑‍💻 Getting Started
 
