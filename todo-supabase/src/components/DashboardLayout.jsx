@@ -166,7 +166,7 @@ export default function DashboardLayout() {
                     ))}
                 </nav>
                 {/* Footer */}
-                <div className="px-4 mt-auto py-4 border-t border-white/10 flex flex-col items-center">
+                <div className="px-4 py-4 border-t border-white/10 flex flex-col items-center bg-gradient-to-t from-sky-700 to-transparent shrink-0">
                     {/* Profile */}
                     <div className={`flex items-center mb-3 ${isSidebarOpen ? "flex-row gap-3" : "flex-col"} transition-all`}>
                         <div className="w-10 h-10 rounded-full bg-white/15 flex items-center justify-center text-white font-semibold">
